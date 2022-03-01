@@ -9,6 +9,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/tuiter').then(() => {
   });;
 
 const app = express();
+app.use(express.json());
 
 app.get('/hello', (req: Request, res: Response) =>
     res.send('Hello World!'));

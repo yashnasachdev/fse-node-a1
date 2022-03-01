@@ -20,9 +20,10 @@ export default class UserController implements UserControllerI {
    findUserById = (req: Request, res: Response) =>
        this.userDao.findUserById(req.params.userid)
            .then(user => res.json(user));
-   createUser = (req: Request, res: Response) =>
+     createUser = (req: Request, res: Response) =>
+     //res.json(req.body)
        this.userDao.createUser(req.body)
-           .then(user => res.json(user));
+          .then(user => res.json(user));
    deleteUser = (req: Request, res: Response) =>
        this.userDao.deleteUser(req.params.userid)
            .then(status => res.json(status));
