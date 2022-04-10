@@ -61,7 +61,7 @@ import mongoose from "mongoose";
 // const DB_QUERY = "retryWrites=true&w=majority";
 // const connectionString = `${PROTOCOL}://${DB_USERNAME}:${DB_PASSWORD}@${HOST}/${DB_NAME}?${DB_QUERY}`;
 // connect to the database
-mongoose.connect('mongodb+srv://yashna:sachdev@cluster0.p3chr.mongodb.net/test?retryWrites=true&w=majority');
+mongoose.connect('mongodb+srv://yashna:sachdev@cluster0.mc9fo.mongodb.net/myFirstDatabase?retryWrites=true&w=majority');
 
 const app = express();
 app.use(express.json());
