@@ -37,8 +37,8 @@ export default class MessageController implements MessageControllerI {
             app.get("/api/users/:uid/messages", MessageController.messageController.findAllMessagesSentByUser);
             app.get("/api/messages/:uid", MessageController.messageController.findAllMessagesSentToUser);
             // TODO ask Ta about these two urls
-            app.post("/api/users/:uid1/messages/:uid2/:mid", MessageController.messageController.userMessagesUser);
-            app.delete("/api/users/:uid1/messages/:uid2/:mid", MessageController.messageController.userUnmessagesUser);
+            app.post("/api/users/:uid1/messages/:uid2", MessageController.messageController.userMessagesUser);
+            app.delete("/api/messages/:mid", MessageController.messageController.userUnmessagesUser);
         }
         return MessageController.messageController;
     }
@@ -69,24 +69,23 @@ export default class MessageController implements MessageControllerI {
 
     /**
      * @param {Request} req Represents request from client, including the
-     * path parameters uid1, uid2 and mid representing the user that is sending the message, the user receiving the message
-     * and the message
+     * path parameters uid1 and uid2 representing the user that is sending the message
+     * and the user receiving the message
      * @param {Response} res Represents response to client, including the
      * body formatted as JSON containing the new messages that was inserted in the
      * database
      */
     userMessagesUser = (req: Request, res: Response) =>
-        MessageController.messageDao.userMessagesUser(req.params.uid1, req.params.uid2, req.params.mid)
+        MessageController.messageDao.userMessagesUser(req.params.uid1, req.params.uid2, req.body)
             .then(messages => res.json(messages));
 
     /**
      * @param {Request} req Represents request from client, including the
-     * path parameters uid1, uid2 and mid representing the user that is deleting the message, the other user
-     * and the message
+     * path parameters mid representing the message that is being deleted
      * @param {Response} res Represents response to client, including status
      * on whether deleting the message was successful or not
      */
     userUnmessagesUser = (req: Request, res: Response) =>
-        MessageController.messageDao.userUnmessagesUser(req.params.uid1, req.params.uid2, req.params.mid)
+        MessageController.messageDao.userUnmessagesUser(req.params.mid)
             .then(status => res.send(status));
 };
