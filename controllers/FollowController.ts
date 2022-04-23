@@ -34,8 +34,8 @@ export default class FollowController implements FollowControllerI {
     public static getInstance = (app: Express): FollowController => {
         if(FollowController.followController === null) {
             FollowController.followController = new FollowController();
-            app.get("/api/users/:uid/follows", FollowController.followController.findAllUsersFollowedByUser);
-            app.get("/api/follows/:uid", FollowController.followController.findAllUsersFollowingUser);
+            app.get("/api/users/:uid/following", FollowController.followController.findAllUsersFollowedByUser);
+            app.get("/api/users/:uid/followedby", FollowController.followController.findAllUsersFollowingUser);
             app.post("/api/users/:uid1/follows/:uid2", FollowController.followController.userFollowsUser);
             app.delete("/api/users/:uid1/follows/:uid2", FollowController.followController.userUnfollowsUser);
         }
@@ -53,7 +53,7 @@ export default class FollowController implements FollowControllerI {
      */
     findAllUsersFollowedByUser = (req: Request, res: Response) =>
         FollowController.followDao.findAllUsersFollowedByUser(req.params.uid)
-            .then(follows => res.json(follows));
+            .then(following => res.json(following));
 
     /**
      * Retrieves all tuits followd by a user from the database
@@ -64,7 +64,7 @@ export default class FollowController implements FollowControllerI {
      */
     findAllUsersFollowingUser = (req: Request, res: Response) =>
         FollowController.followDao.findAllUsersFollowingUser(req.params.uid)
-            .then(follows => res.json(follows));
+            .then(followedby => res.json(followedby));
 
     /**
      * @param {Request} req Represents request from client, including the
