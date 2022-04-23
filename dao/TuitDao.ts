@@ -20,16 +20,14 @@ import TuitDaoI from "../interfaces/TuitDao";
          TuitModel.find();
      findAllTuitsByUser = async (uid: string): Promise<Tuit[]> =>
          TuitModel.find({postedBy: uid});
-     findTuitById = async (uid: string): Promise<any> =>
-         TuitModel.findById(uid)
-             .populate("postedBy")
-             .exec();
+     findTuitById = async (tid: string): Promise<any> =>
+         TuitModel.findById(tid);
      createTuitByUser = async (uid: string, tuit: Tuit): Promise<Tuit> =>
          TuitModel.create({...tuit, postedBy: uid});
-     updateTuit = async (uid: string, tuit: Tuit): Promise<any> =>
+     updateTuit = async (tid: string, tuit: Tuit): Promise<any> =>
          TuitModel.updateOne(
-             {_id: uid},
+             {_id: tid},
              {$set: tuit});
-     deleteTuit = async (uid: string): Promise<any> =>
-         TuitModel.deleteOne({_id: uid});
+     deleteTuit = async (tid: string): Promise<any> =>
+         TuitModel.deleteOne({_id: tid});
  }
