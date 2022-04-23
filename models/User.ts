@@ -1,3 +1,6 @@
+/**
+ * @file Declares User data type representing a User on Tuiter
+ */
 import AccountType from "./AccountType";
 import MaritalStatus from "./MaritalStatus";
 import Location from "./Location";
