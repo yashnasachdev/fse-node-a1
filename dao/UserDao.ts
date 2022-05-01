@@ -3,6 +3,22 @@ import UserModel from "../mongoose/UserModel";
 import UserDaoI from "../interfaces/UserDao";
 
 export default class UserDao implements UserDaoI {
+
+    private static userDao: UserDao | null = null;
+
+    /**
+     * Creates singleton DAO instance
+     * @returns UserDao
+     */
+    public static getInstance = (): UserDao => {
+        if (UserDao.userDao === null) {
+            UserDao.userDao = new UserDao();
+        }
+        return UserDao.userDao;
+    }
+
+    private constructor() {
+    }
    async findAllUsers(): Promise<User[]> {
        return await UserModel.find();
    }

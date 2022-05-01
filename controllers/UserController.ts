@@ -4,18 +4,33 @@ import User from "../models/User"
 import UserControllerI from "../interfaces/UserController";
 
 export default class UserController implements UserControllerI {
-   app: Express;
-   userDao: UserDao;
-   constructor(app: Express, userDao: UserDao) {
-       this.app = app;
-       this.userDao = userDao;
-       this.app.get('/users', this.findAllUsers);
-       this.app.get('/users/:userid', this.findUserById);
-       this.app.post('/users', this.createUser);
-       this.app.delete('/users/:userid', this.deleteUser);
-       this.app.put('/users/:userid', this.updateUser);
-       this.app.delete("/users/username/:username/delete", this.deleteUserByUsername)
-   }
+    private userDao: UserDao = UserDao.getInstance();
+
+    //use Singleton design pattern to get a UserControllerI instance
+    private static userController: UserController | null = null;
+    /**
+     * Creates singleton controller instance
+     * @param {Express} app Express instance to declare the RESTful Web service API
+     * @returns userController
+     */
+    public static getInstance = (app: Express): UserController => {
+        if (UserController.userController === null) {
+            UserController.userController = new UserController();
+            //define HTTP request address
+            app.get("/users", UserController.userController.findAllUsers);
+            app.get("/users/:uid", UserController.userController.findUserById);
+            app.post("/users", UserController.userController.createUser);
+            app.put("/users/:uid", UserController.userController.updateUser);
+            app.delete("/users/:uid", UserController.userController.deleteUser);
+            //for testing, not RESTful
+            app.delete("/users/username/:username/delete", UserController.userController.deleteUserByUsername)
+        }
+        return UserController.userController;
+    }
+
+
+    private constructor() {
+    }
    findAllUsers = (req: Request, res: Response) =>
        this.userDao.findAllUsers()
            .then(users => res.json(users));

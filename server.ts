@@ -14,46 +14,55 @@
  * service
  */
 import express, {Request, Response} from 'express';
+import mongoose from "mongoose";
 import UserController from "./controllers/UserController";
 import TuitController from "./controllers/TuitController";
 import LikeController from "./controllers/LikeController";
-import FollowController from "./controllers/FollowController"
-import BookmarkController from "./controllers/BookmarkController"
-import MessageController from "./controllers/MessageController"
+import FollowController from "./controllers/FollowController";
+import BookmarkController from "./controllers/BookmarkController";
+import MessageController from "./controllers/MessageController";
+var cors = require('cors')
 
-import mongoose from "mongoose";
-
+//read database username && password through process.env
 const dotenv = require("dotenv")
 dotenv.config()
 
-//build the connection string
-// const PROTOCOL = "mongodb+srv";
- const DB_USERNAME = process.env.DB_USERNAME;
- const DB_PASSWORD = process.env.DB_PASSWORD;
+/*
+connect to local mongoDB database
+mongoose.connect('mongodb://localhost:27017/tuiter');
+ */
 
 
+/*
+ * connect to remote mongoDB database
+ * This is for Assignment 3
+ */
 mongoose.connect('mongodb+srv://' + process.env.DB_USERNAME + ':' + process.env.DB_PASSWORD
-      + '@cluster0.mc9fo.mongodb.net/myFirstDatabase?retryWrites=true&w=majority');
+     + '@cluster3.5oobt.mongodb.net/myFirstDatabase?retryWrites=true&w=majority');
+mongoose.connection.once("open", function(){
+    console.log("Database connected successfully");
+})
 
 
 const app = express();
-app.use(express.json());
+app.use(express.json())
+//cross network domain
+app.use(cors())
 
-app.get('/', (req: Request, res: Response) =>
-    res.send('Welcome!'));
+app.get('/hello', (req, res) =>
+    res.send('Hello World!'));
 
-app.get('/add/:a/:b', (req: Request, res: Response) =>
-    res.send(req.params.a + req.params.b));
+app.get('/add/:a/:b', (req, res) => {
+    res.send(req.params.a + req.params.b);
+})
 
-// instantiate controllers
+//instantiate controllers
 const userController = UserController.getInstance(app);
 const tuitController = TuitController.getInstance(app);
-const likesController = LikeController.getInstance(app);
-const followsController = FollowController.getInstance(app);
-const bookmarksController = BookmarkController.getInstance(app);
-const messagesController = MessageController.getInstance(app);
-
-
+const likeController = LikeController.getInstance(app);
+const followController = FollowController.getInstance(app);
+const bookmarkController = BookmarkController.getInstance(app);
+const messageController = MessageController.getInstance(app);
 
 /**
  * Start a server listening at port 4000 locally
